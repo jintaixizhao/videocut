@@ -37,10 +37,10 @@
 		<video id="video" src="" controls="controls"></video>
 	</div>
 	<div class="operate_wrapper">
-		<div class="title">点击记录<button onclick="clearRecord()" id="clearRecord">清空记录</button>设定时间<input type="text" id="skipValue" onkeyup="execSkip()"/><button onclick="skipTo()" id="skip">跳转</button></div>
+		<div class="title">点击记录<button onclick="clearRecord()" id="clearRecord">清空记录</button>设定时间<input type="text" id="skipValue" class="edit_type" onkeydown="execSkip()"/><button onclick="skipTo()" id="skip">跳转</button></div>
 		<div class="record" id="record"></div>
 		<div class="edit">
-			<textarea name="" id="" class="edit_type" cols="30" rows="10"></textarea>
+			<textarea name="" id="edit_text" class="edit_type" cols="30" rows="10"></textarea>
 		</div>
 	</div>
 	<div class="script_wrapper">
@@ -50,9 +50,11 @@
 		const video = document.querySelector("#video");
 		const record = document.querySelector("#record");
 		const skipValue = document.getElementById("skipValue");
+		const edit_text = document.getElementById("edit_text");
 
 		window.onload=function(){
 			document.querySelector("#video").setAttribute("src","./video/"+videoName)
+			edit_text.value = window.localStorage.getItem("record")||""
 		}
 		video.onplay= function(){
 			const text = getTime()
@@ -103,7 +105,9 @@
 
 		[...document.querySelectorAll(".edit_type")].map(i=>i.onkeyup = function(e){
 			var e = e || window.event
-			e.stopPropagation()
+			if(e.keyCode == 32){
+				e.stopPropagation()
+			}
 		})
 		document.body.onkeyup=function(e){
 			if(e.keyCode==32){
@@ -131,6 +135,14 @@
 			const e = window.event
 			e.keyCode == 13 && skipTo()
 		}
+
+		document.onkeydown=function(event){ 
+            var e = event || window.event || arguments.callee.caller.arguments[0]; 
+			if (e.keyCode == 83 && e.ctrlKey) {  
+                window.localStorage.setItem("record",edit_text.value) 
+            	e.preventDefault()
+            }
+         }
 	</script>
 </body>
 </html>
