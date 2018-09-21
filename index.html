@@ -121,13 +121,13 @@
 
 		function skipTo(){
 			const value = skipValue.value;
-			try{
-				const arr =value.split(":").map(i=>parseInt(i))
+			if(!/^\d+[:：]\d+$/.test(value)){
+				alert("时间不合规则")
+				return false
+			}else{
+				const arr =value.replace(/：/g,":").split(":").map(i=>parseInt(i))
 				const time = arr[0]*60+arr[1]
 				video.currentTime = time
-			}catch(error){
-				console.log(error);
-				alert("时间不合规则")
 			}
 		}
 
